@@ -10,14 +10,25 @@ export default function PlaylistPage() {
 
   const [playlist, setPlaylist] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!playlistUrl) return;
+    if (!playlistUrl) {
+      setError("URL da playlist não fornecida");
+      setLoading(false);
+      return;
+    }
 
     setLoading(true);
     fetchPlaylist(playlistUrl)
-      .then((data) => setPlaylist(data))
-      .catch((err) => console.error(err))
+      .then((data) => {
+        setPlaylist(data);
+        setError("");
+      })
+      .catch((err) => {
+        console.error(err);
+        setError("Não foi possível carregar a playlist");
+      })
       .finally(() => setLoading(false));
   }, [playlistUrl]);
 
@@ -29,24 +40,33 @@ export default function PlaylistPage() {
     );
   }
 
-  if (!playlist) {
+  if (error) {
     return (
       <div className="text-center text-red-500 mt-10">
-        Não foi possível carregar a playlist.
+        {error}
+      </div>
+    );
+  }
+
+  if (!playlist?.musics?.length) {
+    return (
+      <div className="text-center text-gray-400 mt-10">
+        Nenhuma música encontrada na playlist.
       </div>
     );
   }
 
   return (
     <div className="bg-gray-900 text-white min-h-screen pt-24 px-6">
-      <h1 className="text-3xl font-bold mb-6">{playlist.name}</h1>
+      <h1 className="text-3xl font-bold mb-6 truncate">{playlist.name || "Sem título"}</h1>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {playlist.musics.map((song) => (
           <MusicCard
-            key={song.link}
+            key={song.number}
             nome={song.name}
-            link={song.link}
-            index={song.number}
+            url={song.url}
+            number={song.number}
             thumbnails={song.thumbnails}
             duration={song.duration}
             viewCount={song.view_count}
