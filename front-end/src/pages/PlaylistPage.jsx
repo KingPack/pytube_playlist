@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import MusicCard from "../components/Playlist/MusicCard";
+import MusicCard from "../components/MusicCard/MusicCard";
 import { LoadingCircle } from "../components/Loading";
 import { fetchPlaylist } from "../services/playlistService";
 
