@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import MusicCard from "../components/MusicCard/MusicCard";
+import UtilityMenu from "../components/UtilityMenu/UtilityMenu";
 import { LoadingCircle } from "../components/Loading";
 import { fetchPlaylist } from "../services/playlistService";
 
@@ -18,6 +19,8 @@ export default function PlaylistPage() {
   const [playlist, setPlaylist] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [viewMode, setViewMode] = useState("grid");
+  const [selectedItems, setSelectedItems] = useState({});
 
   useEffect(() => {
     if (!playlistUrl) {
@@ -38,6 +41,36 @@ export default function PlaylistPage() {
       })
       .finally(() => setLoading(false));
   }, [playlistUrl]);
+
+  const handleSelectAll = () => {
+    if (!playlist) return;
+    const allSelected = playlist.musics.reduce((acc, music) => {
+      acc[music.number] = true;
+      return acc;
+    }, {});
+    setSelectedItems(allSelected);
+  };
+
+  const handleDeselectAll = () => {
+    setSelectedItems({});
+  };
+
+  const handleSelect = (number, value) => {
+    setSelectedItems((prev) => ({ ...prev, [number]: value }));
+  };
+
+  const handleDownload = () => {
+    const selectedMusic = playlist.musics.filter(
+      (m) => selectedItems[m.number]
+    );
+    alert(`Download de ${selectedMusic.length} músicas selecionadas (simulado)`);
+  };
+
+  const toggleView = () => {
+    setViewMode((prev) => (prev === "grid" ? "list" : "grid"));
+  };
+
+  const selectedCount = Object.values(selectedItems).filter(Boolean).length;
 
   if (loading) {
     return (
@@ -61,7 +94,7 @@ export default function PlaylistPage() {
 
   return (
     <div className="bg-gray-900 text-white min-h-screen pt-24 px-4">
-      <div className="bg-gray-800 rounded-xl p-4 mb-6 shadow-md inline-block">
+      <div className="bg-gray-800 rounded-xl p-4 mb-4 shadow-md inline-block">
         <h1 className="text-xl font-semibold mb-1 truncate sm:truncate-none">
           {playlist.name || "Sem título"}
         </h1>
@@ -78,7 +111,22 @@ export default function PlaylistPage() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <UtilityMenu
+        selectedCount={selectedCount}
+        onSelectAll={handleSelectAll}
+        onDeselectAll={handleDeselectAll}
+        onDownload={handleDownload}
+        onToggleView={toggleView}
+        viewMode={viewMode}
+      />
+
+      <div
+        className={
+          viewMode === "grid"
+            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6"
+            : "flex flex-col gap-2"
+        }
+      >
         {playlist.musics.map((song) => (
           <MusicCard
             key={song.number}
@@ -88,6 +136,9 @@ export default function PlaylistPage() {
             thumbnails={song.thumbnails}
             duration={song.duration}
             viewCount={song.view_count}
+            viewMode={viewMode}
+            selected={!!selectedItems[song.number]}
+            onSelect={(val) => handleSelect(song.number, val)}
           />
         ))}
       </div>
