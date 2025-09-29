@@ -11,6 +11,13 @@ const formatNumber = (num) => {
 export default function MusicCard({ nome, url, number, thumbnails = [], duration, viewCount }) {
   const [selected, setSelected] = useState(false);
 
+  const formatDuration = (seconds) => {
+    if (!seconds) return "Duração desconhecida";
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${String(s).padStart(2, "0")} min`;
+  };
+
   return (
     <button
       id={url || `music-${number}`}
@@ -42,15 +49,14 @@ export default function MusicCard({ nome, url, number, thumbnails = [], duration
       </div>
 
       <div className="p-4">
-        <h2 className="text-lg font-semibold text-center truncate">{nome || "Sem título"}</h2>
-        <p className="text-xs text-gray-400 text-center mt-1">
-          {duration ? `${Math.floor(duration / 60)}:${String(duration % 60).padStart(2, "0")} min` : "Duração desconhecida"}
-        </p>
-        {viewCount != null && (
-          <p className="text-xs text-gray-400 text-center mt-1">
-            {formatNumber(viewCount)} visualizações
-          </p>
-        )}
+        <h2 className="text-base font-semibold text-center break-words line-clamp-2">
+          {nome || "Sem título"}
+        </h2>
+
+        <div className="flex justify-center gap-4 mt-2 text-xs text-gray-400">
+          <span>{formatDuration(duration)}</span>
+          {viewCount != null && <span>{formatNumber(viewCount)} visualizações</span>}
+        </div>
       </div>
     </button>
   );
