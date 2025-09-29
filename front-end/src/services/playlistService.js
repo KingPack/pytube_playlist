@@ -20,7 +20,7 @@ export const fetchPlaylist = async (
       url: playlistUrl,
       page: page.toString(),
       page_size: pageSize.toString(),
-      is_pagination: isPagination ? "true" : "false", // força string
+      is_pagination: isPagination ? "true" : "false",
     });
 
     const response = await api.get(`/playlist/?${params.toString()}`);
@@ -30,6 +30,3 @@ export const fetchPlaylist = async (
     throw error;
   }
 };
-
-
-

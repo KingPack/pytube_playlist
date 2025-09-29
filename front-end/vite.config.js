@@ -4,11 +4,11 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true, // permite acesso de fora do container
+    host: true,
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://backend:8000', // nome do serviço Docker
+        target: 'http://backend:8000',
         changeOrigin: true,
       }
     }

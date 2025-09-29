@@ -1,27 +1,27 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import "./Navbar.css";
 
-function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-
+export default function Navbar() {
   return (
-    <nav className="navbar">
-      <div className="logo">MinhaApp</div>
+    <nav className="fixed top-0 left-0 w-full bg-gray-900 text-white shadow-md z-50">
+      <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
+        {/* Logo */}
+        <Link to="/" className="text-2xl font-bold hover:text-blue-400 transition">
+          Pytube Downloader
+        </Link>
 
-      <ul className={`nav-links ${isOpen ? "open" : ""}`}>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/sobre">Sobre</Link></li>
-        <li><Link to="/contato">Contato</Link></li>
-      </ul>
-
-      <div className="burger" onClick={() => setIsOpen(!isOpen)}>
-        <span></span>
-        <span></span>
-        <span></span>
+        {/* Links em linha */}
+        <div className="flex space-x-8 text-lg font-medium">
+          <Link to="/" className="hover:text-blue-400 transition">
+            Inicio
+          </Link>
+          <Link to="/about" className="hover:text-blue-400 transition">
+            Sobre
+          </Link>
+          <Link to="/contact" className="hover:text-blue-400 transition">
+            Contato
+          </Link>
+        </div>
       </div>
     </nav>
   );
 }
-
-export default Navbar;

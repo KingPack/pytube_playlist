@@ -42,7 +42,6 @@ const Playlist = ({ playlistUrl }) => {
     }
   };
 
-  // busca a página atual sempre que mudar
   useEffect(() => {
     fetchPagina(paginaAtual);
   }, [playlistUrl, paginaAtual]);
