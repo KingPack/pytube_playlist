@@ -4,6 +4,13 @@ import MusicCard from "../components/MusicCard/MusicCard";
 import { LoadingCircle } from "../components/Loading";
 import { fetchPlaylist } from "../services/playlistService";
 
+const formatNumber = (num) => {
+  if (num >= 1_000_000_000) return Math.floor(num / 1_000_000_000) + "B";
+  if (num >= 1_000_000) return Math.floor(num / 1_000_000) + "M";
+  if (num >= 1_000) return Math.floor(num / 1_000) + "K";
+  return num.toString();
+};
+
 export default function PlaylistPage() {
   const location = useLocation();
   const playlistUrl = new URLSearchParams(location.search).get("url");
@@ -41,11 +48,7 @@ export default function PlaylistPage() {
   }
 
   if (error) {
-    return (
-      <div className="text-center text-red-500 mt-10">
-        {error}
-      </div>
-    );
+    return <div className="text-center text-red-500 mt-10">{error}</div>;
   }
 
   if (!playlist?.musics?.length) {
@@ -57,15 +60,30 @@ export default function PlaylistPage() {
   }
 
   return (
-    <div className="bg-gray-900 text-white min-h-screen pt-24 px-6">
-      <h1 className="text-3xl font-bold mb-6 truncate">{playlist.name || "Sem título"}</h1>
+    <div className="bg-gray-900 text-white min-h-screen pt-24 px-4">
+      <div className="bg-gray-800 rounded-xl p-4 mb-6 shadow-md inline-block">
+        <h1 className="text-xl font-semibold mb-1 truncate sm:truncate-none">
+          {playlist.name || "Sem título"}
+        </h1>
+
+        <div className="flex flex-wrap gap-1 text-gray-400 text-sm mb-1">
+          <span>{playlist.name_uploader || "Desconhecido"}</span>
+          <span>
+            • {playlist.playlist_count} músicas • {formatNumber(playlist.playlist_view)} visualizações
+          </span>
+        </div>
+
+        {playlist.description && (
+          <p className="text-gray-300 text-sm">{playlist.description}</p>
+        )}
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {playlist.musics.map((song) => (
           <MusicCard
             key={song.number}
             nome={song.name}
-            link={song.link}
+            url={song.url}
             number={song.number}
             thumbnails={song.thumbnails}
             duration={song.duration}
