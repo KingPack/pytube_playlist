@@ -1,5 +1,4 @@
 import yt_dlp
-# import debugpy
 
 from math import ceil
 
@@ -60,7 +59,6 @@ async def get_playlist_info(
                 Music(
                     name=entry.get("title", "Sem título"),
                     number=idx,
-                    url=entry.get("webpage_url", ""),
                     link=entry.get("url", ""),
                     thumbnails=thumbnails,
                     duration=entry.get("duration", 0),

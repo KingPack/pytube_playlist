@@ -11,7 +11,6 @@ class Thumbnail(BaseModel):
 class Music(BaseModel):
     name: str
     number: int
-    url: str
     link: str
     thumbnails: List[Thumbnail]
     duration: Optional[int] = 0
