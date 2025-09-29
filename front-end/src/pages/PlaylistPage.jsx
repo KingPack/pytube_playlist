@@ -65,7 +65,7 @@ export default function PlaylistPage() {
           <MusicCard
             key={song.number}
             nome={song.name}
-            url={song.url}
+            link={song.link}
             number={song.number}
             thumbnails={song.thumbnails}
             duration={song.duration}

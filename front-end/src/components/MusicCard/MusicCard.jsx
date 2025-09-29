@@ -8,7 +8,7 @@ const formatNumber = (num) => {
   return num.toString();
 };
 
-export default function MusicCard({ nome, url, number, thumbnails = [], duration, viewCount }) {
+export default function MusicCard({ nome, link, number, thumbnails = [], duration, viewCount }) {
   const [selected, setSelected] = useState(false);
 
   const formatDuration = (seconds) => {
@@ -20,7 +20,7 @@ export default function MusicCard({ nome, url, number, thumbnails = [], duration
 
   return (
     <button
-      id={url || `music-${number}`}
+      id={link || `music-${number}`}
       onClick={() => setSelected(!selected)}
       className={`relative bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition w-full text-left ${
         selected ? "ring-4 ring-blue-500" : ""
