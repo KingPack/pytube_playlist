@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 
+const formatNumber = (num) => {
+  if (num >= 1_000_000_000) return Math.floor(num / 1_000_000_000) + "B";
+  if (num >= 1_000_000) return Math.floor(num / 1_000_000) + "M";
+  if (num >= 1_000) return Math.floor(num / 1_000) + "K";
+  return num.toString();
+};
+
 export default function MusicCard({ nome, url, number, thumbnails = [], duration, viewCount }) {
   const [selected, setSelected] = useState(false);
 
@@ -41,7 +48,7 @@ export default function MusicCard({ nome, url, number, thumbnails = [], duration
         </p>
         {viewCount != null && (
           <p className="text-xs text-gray-400 text-center mt-1">
-            {viewCount.toLocaleString()} visualizações
+            {formatNumber(viewCount)} visualizações
           </p>
         )}
       </div>
