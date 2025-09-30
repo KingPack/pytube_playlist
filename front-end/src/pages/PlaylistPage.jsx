@@ -59,6 +59,7 @@ export default function PlaylistPage() {
 
   const handleDownload = () => {
     alert(`Baixando ${selectedItems.length} músicas...`);
+    console.log(selectedItems)
   };
 
   if (loading)
@@ -111,7 +112,7 @@ export default function PlaylistPage() {
           <MusicCard
             key={song.number}
             nome={song.name}
-            url={song.url}
+            url={song.link}
             number={song.number}
             thumbnails={song.thumbnails}
             duration={song.duration}
