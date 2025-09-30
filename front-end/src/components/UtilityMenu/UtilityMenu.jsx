@@ -1,4 +1,4 @@
-import { CheckCircleIcon, Squares2X2Icon, Bars3Icon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon, Squares2X2Icon, Bars3Icon, ArrowDownTrayIcon, XCircleIcon } from "@heroicons/react/24/solid";
 
 export default function UtilityMenu({
   selectedCount = 0,
@@ -22,7 +22,7 @@ export default function UtilityMenu({
           onClick={onDeselectAll}
           className="flex items-center gap-1 px-3 py-1 bg-gray-600 hover:bg-gray-700 rounded text-sm"
         >
-          <CheckCircleIcon className="w-5 h-5 rotate-45" />
+          <XCircleIcon className="w-5 h-5" />
           Desmarcar tudo
         </button>
         <span className="text-sm text-gray-300">{selectedCount} selecionados</span>
@@ -31,8 +31,9 @@ export default function UtilityMenu({
       <div className="flex items-center gap-2">
         <button
           onClick={onDownload}
-          className="px-3 py-1 bg-green-600 hover:bg-green-700 rounded text-sm"
+          className="flex items-center gap-1 px-3 py-1 bg-green-600 hover:bg-green-700 rounded text-sm"
         >
+          <ArrowDownTrayIcon className="w-5 h-5" />
           Download
         </button>
         <button
