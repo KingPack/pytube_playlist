@@ -2,12 +2,14 @@ services:
   backend:
     build:
       context: .
-      dockerfile: docker/backend.Dockerfile
+      dockerfile: docker/dev/backend-dev.Dockerfile
     container_name: fastapi_backend
     ports:
       - "8000:8000"
+      - "5678:5678"
     volumes:
       - ./back-end:/app
+      - ./worker:/app/worker
     environment:
       - MONGODB_URI=mongodb://mongo:27017/app_db
       - REDIS_URL=redis://redis:6379/0

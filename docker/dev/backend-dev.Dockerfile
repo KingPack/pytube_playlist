@@ -24,6 +24,12 @@ COPY back-end/ .
 EXPOSE 8000 5678
 
 # Comando final: iniciar com debugpy + uvicorn
-CMD ["python", "-Xfrozen_modules=off", "-m", "debugpy", \
+CMD ["python", "-Xfrozen_modules=off", \
+     "-m", "debugpy", \
      "--listen", "0.0.0.0:5678", \
-     "-m", "uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+     "--wait-for-client", \
+     "-m", "uvicorn", \
+     "api.main:app", \
+     "--host", "0.0.0.0", \
+     "--port", "8000", \
+     "--reload"]
