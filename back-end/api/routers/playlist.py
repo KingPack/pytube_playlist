@@ -2,10 +2,14 @@ import yt_dlp
 
 from math import ceil
 
-from fastapi import HTTPException, Query, APIRouter
+from fastapi import HTTPException, Query, APIRouter, Request
 
-from ..schemas.playlist import PlaylistInfo
+from ..schemas.playlist import PlaylistInfo, PlaylistRequest
 from ..schemas.music import Music, Thumbnail
+from ..utils.validate_ip import validate_ip
+from ..internal.rate_limiter import allow_request
+from ..internal.idempotency import make_payload_hash, check_and_set_idempotency
+from worker.tasks import download_and_zip_playlist
 
 
 router = APIRouter(
@@ -17,7 +21,7 @@ router = APIRouter(
 @router.get("/", response_model=PlaylistInfo)
 async def get_playlist_info(
     url: str = Query(...,
-                     example="https://youtube.com/playlist?list=PLgOTmTz9Gp0hAdnZ4B1QmQfhRgTq_62jF",
+                     example="https://www.youtube.com/playlist?list=PLgOTmTz9Gp0joP1E9-gy4UjCchdTB6teR",
                      description="URL da playlist do YouTube"
                     ),
     page: int = Query(1,
@@ -95,3 +99,33 @@ async def get_playlist_info(
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/download_playlist")
+def download_playlist(req: PlaylistRequest, request: Request):
+
+    client_ip = validate_ip(request.client.host)
+
+    allowed = allow_request(f"rate:ip:{client_ip}", rate=0.2, burst=5)
+
+    if not allowed:
+        raise HTTPException(status_code=429, detail="Many Requests, wait a time and try again.")
+
+    payload_hash = make_payload_hash(req.dict())
+    key = f"idempotency: {req.id_session or client_ip}"
+    is_new = check_and_set_idempotency(key, payload_hash)
+
+    if not is_new:
+        raise HTTPException(status_code=409, detail="Request Duplicate.")
+
+    task = download_and_zip_playlist.apply_async(
+        args=[[m.link for m in req.musics], req.title, client_ip],
+        expires=60 * 60 * 6,  # 6 Hours
+        retry=False
+    )
+
+    return {
+        "task_id": task.id,
+        "status": "queued",
+        "client_ip": client_ip
+    }

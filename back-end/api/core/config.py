@@ -1,5 +1,3 @@
-
-
 from fastapi.middleware.cors import CORSMiddleware
 
 def init_app(app):
