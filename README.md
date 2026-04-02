@@ -36,6 +36,13 @@ music-downloader-backend/
 └── main.py
 ```
 
+## 📚 Documentação Atual
+
+Documentação técnica gerada com base no estado atual do código:
+
+- [Resumo do Projeto](docs/PROJECT_SUMMARY.md)
+- [Arquitetura do Sistema](docs/ARCHITECTURE.md)
+
 ## 📌 Funcionalidades Planejadas
 
 * [ ] Buscar música por nome/artista
