@@ -7,6 +7,11 @@ RUN pip install --no-cache-dir uv
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY back-end/pyproject.toml back-end/uv.* ./
 
 RUN uv sync --frozen

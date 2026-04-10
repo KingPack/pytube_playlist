@@ -1,7 +1,7 @@
 [project]
 name = "back-end"
 version = "0.1.0"
-description = "Add your description here"
+description = "Playlist downloader back-end service"
 readme = "README.md"
 requires-python = "==3.13.4"
 dependencies = [
@@ -9,7 +9,7 @@ dependencies = [
     "fastapi[standard]==0.116.1",
     "redis==6.4.0",
     "uvicorn==0.37.0",
-    "yt-dlp==2025.8.22",
+    "yt-dlp",
     "flower==2.0.0",
     "pymongo==4.15.2",
 ]
